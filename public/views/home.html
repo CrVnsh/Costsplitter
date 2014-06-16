@@ -1,0 +1,67 @@
+<div class="jumbotron" >
+		<h1>Costsplitter</h1>
+		<input type="text" ng-model="search" placeholder="Gruppen filtern...">
+		<br>
+		<br>
+		<a href="#newGroup" class="btn btn-success" data-toggle="modal"><span class="glyphicon glyphicon-plus">Neue Gruppe</span></a>
+		<br>
+		<br>
+		<div class="container">
+		<table class="table">
+			<tr ng-repeat="group in groups | filter: search">
+				<td ><a ng-click="goToGroup(group._id, group.name)" class="group_link">{{ group.name }}</a></td>
+				<td >{{ group.teilnehmer }}</td>
+				<td ><a href="#editGroup" ng-click="idSaveGroup(group._id)" class="btn btn-danger" data-toggle="modal">bearbeiten</a></td>
+				<td ><a class="btn btn-default" ng-click="removeGroup(group._id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+			</tr>
+		</table>
+		</div>
+	</div>
+
+	<div id="newGroup" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Neue Gruppe</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+					<table class="table">
+							<tr>
+								<td>Gruppenname:</td>
+
+							</tr>
+							<tr>
+								<td>
+								<input type="text" ng-model="newGroupName">
+								</td>
+							</tr>
+						</table>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<a href class="btn btn-success" ng-click="addGroup()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="editGroup" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Gruppe bearbeiten</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Gruppenname: <input type="text" ng-model="editGroupName">
+					</p>
+				</div>
+				<div class="modal-footer">
+					<a href class="btn btn-success" ng-click="editGroup()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
+				</div>
+			</div>
+		</div>
+	</div>

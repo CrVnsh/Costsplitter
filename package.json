@@ -1,0 +1,17 @@
+{
+  "name": "phruma",
+  "version": "0.0.0",
+  "description": "Pretty cool",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "sham",
+  "license": "ISC",
+  "dependencies": {
+    "express": "3.x",
+    "logfmt": "^1.1.2",
+    "mongoose": "~3.6.13"
+  }
+}

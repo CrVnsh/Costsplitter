@@ -1,0 +1,11 @@
+.table > tbody > tr > td{
+	border-top: none;
+		}
+
+.group_link:hover {
+	cursor: pointer;
+}
+
+.person_link:hover {
+	cursor: pointer;
+}

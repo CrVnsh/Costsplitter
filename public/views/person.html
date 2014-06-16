@@ -1,0 +1,69 @@
+<div ng-init="personInit()">
+	<div class="jumbotron">
+		<h2>{{personName}}</h2>
+        <p><a href="#newExpense" class="btn btn-success" data-toggle="modal"><span class="glyphicon glyphicon-plus">Ausgabe hinzufügen</span></a>
+		<p><b>Ausgaben:</b></p>
+        <table class="table">
+			<tr ng-repeat="expense in expenses">
+				<td><a href="#Beschreibung" ng-click="idSaveExpense(expense._id, expense.descr, expense.value, expense.date)" data-toggle="modal"> {{ expense.descr }}</a></td>
+				<td>{{ expense.value + '€'}}</td>
+                <td>{{ expense.date }}</td>
+			</tr>
+		<!-- 	<tr>
+				<td></td>
+				<td>{{ sum +'€'}}</td>
+                <td></td>
+			</tr> -->
+		</table>
+	</div>
+
+	<div id="newExpense" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Neue Ausgabe</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Beschreibung: <input type="text" ng-model="expenseDescr">
+					</p>
+					<p>
+						Betrag: <input type="number" ng-model="expenseValue">
+					</p>
+                    <p>
+                        Datum: <input type="date" ng-model="expenseDate">
+                    </p>
+				</div>
+				<div class="modal-footer">
+					<a href class="btn btn-success" ng-click="addExpense()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div id="Beschreibung" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Ausgaben-Details</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Betrag: {{  expenseInfoValue + '€'}}
+                    </p>
+                    <p>
+                        Beschreibung: {{ expenseInfoDescr }}
+                    </p>
+                    <p>
+                        Datum: {{ expenseInfoDate }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a href class="btn btn-success" data-dismiss="modal">OK</a>
+                    <a href class="btn btn-danger" data-dismiss="modal" ng-click="removeExpense()">Löschen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

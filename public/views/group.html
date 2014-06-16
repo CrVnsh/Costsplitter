@@ -1,0 +1,33 @@
+<div ng-init="groupInit()">
+	<div class="jumbotron" >
+		<h2>{{groupName}}</h2>
+		<table class="table">
+			<tr>
+				<td><a href="#newPerson" class="btn btn-success" data-toggle="modal"><span class="glyphicon glyphicon-plus">Person hinzufügen</span></a></td>
+			</tr>
+			<tr ng-repeat="person in persons">
+				<td><a ng-click="goToPerson(person._id, person.name)" class="person_link">{{ person.name }}</a></td>
+				<td><a href class="btn btn-default" ng-click="removePerson(person._id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="newPerson" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Neue Person</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Name: <input type="text" ng-model="addPersonName">
+					</p>
+				</div>
+				<div class="modal-footer">
+					<a href class="btn btn-success" ng-click="addPerson()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
