@@ -25,17 +25,17 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Beschreibung: <input type="text" ng-model="expenseDescr">
+						Beschreibung: <input type="text" ng-model="expenseDescr" ng-keypress="pressEnter($event)"> <div class="alert alert-danger" ng-show="show">Bitte Beschreibung eingeben</div>
 					</p>
 					<p>
-						Betrag: <input type="number" ng-model="expenseValue">
+						Betrag: <input type="number" ng-model="expenseValue" ng-keypress="pressEnter($event)"><div class="alert alert-danger" ng-show="show">Bitte Betrag eingeben</div>
 					</p>
                     <p>
-                        Datum: <input type="date" ng-model="expenseDate">
+                        Datum: <input type="date" ng-model="expenseDate" ng-keypress="pressEnter($event)"><div class="alert alert-danger" ng-show="show">Bitte Datum eingeben</div>
                     </p>
 				</div>
 				<div class="modal-footer">
-					<a href class="btn btn-success" ng-click="addExpense()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-success" ng-click="addExpense()">speichern</a>
 					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
 				</div>
 			</div>

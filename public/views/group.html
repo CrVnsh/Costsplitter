@@ -7,9 +7,11 @@
 			</tr>
 			<tr ng-repeat="person in persons">
 				<td><a ng-click="goToPerson(person._id, person.name)" class="person_link">{{ person.name }}</a></td>
+				<td>Total: {{personExpenses[person._id]}}</td>
 				<td><a href class="btn btn-default" ng-click="removePerson(person._id)"><span class="glyphicon glyphicon-remove"></span></a></td>
 			</tr>
 		</table>
+        <p><a ng-click="goToCostsplit()" class="btn btn-success"><span class="glyphicon glyphicon-plus">Split Costs</span></a></p>
 	</div>
 
 	<div id="newPerson" class="modal fade" role="dialog">
@@ -20,7 +22,7 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Name: <input type="text" ng-model="addPersonName">
+						Name: <input type="text" ng-model="addPersonName"  ng-keypress="pressEnter($event)"><div class="alert alert-danger" ng-show="show">Bitte Personenname eingeben</div>
 					</p>
 				</div>
 				<div class="modal-footer">

@@ -1,0 +1,15 @@
+<div ng-init="groupInit()">
+
+<div class= jumbotron>
+    <h1>{{groupName}}<a href="http://localhost:5000/" target="_top">back</a></h1>
+
+    <table class="table">
+        <tr ng-repeat="person in persons">
+            <td>{{ person.name }}</td>
+            <td style="color: {{stylegen(personDeltas[person._id])}} ">Total: {{personDeltas[person._id]}}</td>
+        </tr>
+    </table>
+    <p>
+    Insgesamte Ausgaben: {{overallSum}}</p>
+</div>
+    </div>

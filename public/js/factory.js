@@ -61,5 +61,13 @@ factory.factory('ExpensesFactory' , function($rootScope , $http){
         return ExpenseID;
     }
 
+      expense.setExpenseValue = function(value){
+        ExpenseValue = value;
+    }
+
+    expense.getExpenseValue = function() {
+        return ExpenseValue;
+    }
+
     return expense;
 });

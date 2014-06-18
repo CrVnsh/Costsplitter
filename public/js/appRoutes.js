@@ -20,6 +20,11 @@
 			controller: 'expensesController'
 		})
 
+        // costsplit page
+        .when('/costsplit', {
+            templateUrl: 'views/costsplit.html',
+            controller: 'personController'
+        })
 
 
 	$locationProvider.html5Mode(true);

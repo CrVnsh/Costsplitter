@@ -8,8 +8,10 @@ function GroupController ($scope, $log, $http, $location, MainFactory)
 
 
 	$scope.addGroup = function() {
-
+		$scope.show = false;
 		var name = $scope.newGroupName;
+		if (name != null) {
+
 		 $http({
 		    url: '/api/groups',
 		    method: "POST",
@@ -18,12 +20,35 @@ function GroupController ($scope, $log, $http, $location, MainFactory)
 			$scope.groups = data;
 			$scope.newGroupName = "";
 		});
+		$('#newGroup').modal('hide');
+	}else{
+		$scope.show = true;
+	}
 
 	}
 
+	$scope.pressEnter = function(event, param) {
+
+		if(event.which == 13) {
+			if(param == "add"){
+
+				$scope.addGroup();	
+				
+			}
+			else
+			{
+				$scope.editGroup();	
+				
+			}
+		}
+	}
+
 	$scope.editGroup = function() {
+		$scope.show = false;
 		var name = $scope.editGroupName;
 		var id = MainFactory.getGroupID();
+		if (name != null) {
+
 		$http({
 		    url: '/api/groups/'+ id,
 		    method: "put",
@@ -31,7 +56,11 @@ function GroupController ($scope, $log, $http, $location, MainFactory)
 		}).success(function(data){
 			$scope.groups = data;
 			$scope.editGroupName = "";
+			$('#editGroup').modal('hide');
 		});
+	}else{
+		$scope.show = true;
+	}
 	}
 
 	$scope.removeGroup = function(id) {
@@ -41,7 +70,26 @@ function GroupController ($scope, $log, $http, $location, MainFactory)
 		    data: { '_id' : id }
 		}).success(function(data){
 			$scope.groups = data;
+			/*(function(id){
+				$http({
+				url: '/api/persons/'+id,
+				method: "delete",
+				data: { 'group_id': id}
+			}).success(function(data){
+				$scope.persons = data;
+				(function(id){
+				$http({
+				url: '/api/personexpenses/' + id,
+				method: "delete",
+				data: { 'person_id': id}
+				});
+			})(id);
+			});
+			} */
 		});
+
+		
+
 	}
 
 	$scope.goToGroup = function(id, name) {
@@ -53,6 +101,8 @@ function GroupController ($scope, $log, $http, $location, MainFactory)
 	
 
 	}
+
+
 
 	$scope.idSaveGroup = function(id) {
 		MainFactory.setGroupID(id);
@@ -68,22 +118,72 @@ function personController ($scope,$log, $http, $location, MainFactory , PersonFa
 
 	$scope.groupInit = function() {
 		$scope.groupName = MainFactory.getGroupName();
+        $scope.personExpenses = new Array();
+        $scope.personDeltas = new Array();
 
 		$http({
 				url: '/api/persons/'+ groupid,
 				method: "GET",
 			}).success(function(data){
 				$scope.persons = data;
+                $scope.counter = 0;
+                $scope.overallSum = 0;
+                var index = 0;
+                for(index = 0; index < data.length; index++) {
+                    (function(i, d) {
+                   $http({
+                        url: '/api/expenses/'+ d[i]._id,
+                        method: "GET",
+                    }).success(function(expenses){
+                           var sum = 0;
+                           var expIndex = 0;
+                           for(expIndex = 0; expIndex < expenses.length; expIndex++) {
+                               sum = sum + expenses[expIndex].value;
+                           }
+                           $scope.personExpenses[d[i]._id] = sum;
+                           $scope.counter = $scope.counter + 1;
+                           if($scope.counter == d.length) {
+                             var c = 0;
+                             for(c = 0; c < d.length; c++) {
+                                 $scope.overallSum = $scope.overallSum + $scope.personExpenses[d[c]._id];
+                             }
+                             for(c = 0; c < d.length; c++) {
+                                 $scope.personDeltas[d[c]._id] = $scope.personExpenses[d[c]._id] - ($scope.overallSum/$scope.persons.length);
+                                 if($scope.personDeltas[d[c]._id] > 0) {
+                                     $scope.personDeltas[d[c]._id] = "+" + $scope.personDeltas[d[c]._id];
+                                 } else {
+                                     $scope.personDeltas[d[c]._id] = "" + $scope.personDeltas[d[c]._id];
+                                 }
+                             }
+                           }
+                       });
+                    })(index, data);
+                }
 			});
 	}
 
-	
+	$scope.pressEnter = function(event, query) {
+
+		if(event.which == 13) {
+
+			
+			$scope.addPerson();
+			
+		}
+	}
+
+	$scope.stylegen = function(value){
+		if (value < 0 ) {
+			return "red";
+		}else
+			return "green";
+	}
 
 
 	$scope.addPerson = function() {
-
+		$scope.show = false;
 		var name = $scope.addPersonName;
-
+		if (name !=null) {
 		 $http({
 		    url: '/api/persons',
 		    method: "POST",
@@ -92,10 +192,16 @@ function personController ($scope,$log, $http, $location, MainFactory , PersonFa
 		}).success(function(data){
 			$scope.persons = data;
 			$scope.addPersonName = "";
+			$('#newPerson').modal('hide');
 		});
+		}
+		else{
+			$scope.show = true;
+		}
 	}
 
 	$scope.removePerson = function(id) {
+
 		$http({
 				url: '/api/persons/'+id+'/'+groupid,
 				method: "delete",
@@ -103,7 +209,16 @@ function personController ($scope,$log, $http, $location, MainFactory , PersonFa
 						'group_id': groupid}
 			}).success(function(data){
 				$scope.persons = data;
+				(function(id){
+				$http({
+				url: '/api/personexpenses/' + id,
+				method: "delete",
+				data: { 'person_id': id}
+				});
+			})(id);
 			});
+
+		
 				
 	}
 
@@ -113,9 +228,18 @@ function personController ($scope,$log, $http, $location, MainFactory , PersonFa
 		PersonFactory.setPersonName(name);
 		$location.path("/person");
 
-	
-
 	}
+
+    $scope.goToCostsplit = function(){
+//        MainFactory.setGroupID(id);
+//        MainFactory.setGroupName(name);
+        $location.path("/costsplit");
+    }
+
+    $scope.sumExpenses = function(id){
+
+    }
+
 }
 function expensesController ($scope, $http, PersonFactory, ExpensesFactory){
 
@@ -133,14 +257,23 @@ function expensesController ($scope, $http, PersonFactory, ExpensesFactory){
 			});
 	}
 
+	$scope.pressEnter = function(event) {
+
+		if(event.which == 13) {
+
+			$scope.addExpense();
+		}
+	}
+
 	
 	// Ausgabe der Person hinzufügen
 	$scope.addExpense = function() {
-
+		$scope.show = false;
 		var descr = $scope.expenseDescr;
 		var value = $scope.expenseValue;
 		var date = $scope.expenseDate;
 
+		if (descr != null && value != null && date != null) {
 		 $http({
 		    url: '/api/expenses',
 		    method: "POST",
@@ -154,6 +287,10 @@ function expensesController ($scope, $http, PersonFactory, ExpensesFactory){
 			$scope.expenseValue = "";
 			$scope.expenseDate = "";
 		});
+		$('#newExpense').modal('hide');}else
+	{
+		$scope.show = 	true;
+	}
 	}
 
 	// Ausgabe der Person entfernen

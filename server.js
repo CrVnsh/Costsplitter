@@ -9,15 +9,13 @@ var Schema = mongoose.Schema;
 
 mongoose.connect('mongodb://sham:costsplit123@ds061797.mongolab.com:61797/db1');
 
-console.log("Connection wurde erstellt");
-
 var groups = mongoose.model('Groups', new Schema({ 
 	name: String
 }),'groups');
 
 var persons = mongoose.model('Persons', new Schema({ 
 	name: String,
-	group_id : String
+	group_id : String,
 }),'users');
 
 var expenses = mongoose.model('Expenses', new Schema({ 
@@ -72,8 +70,7 @@ app.put('/api/groups/:group_id', function(req,res){
 app.delete('/api/groups/:group_id', function(req,res){
 	groups.remove({
 		_id : req.params.group_id
-	},
-	function(err, data) {
+	},function(err, data) {
 			if (err) res.send(err);
 			groups.find(function(err, data) {
 				if (err)
@@ -85,6 +82,7 @@ app.delete('/api/groups/:group_id', function(req,res){
 
 
 //Personen
+
 app.get('/api/persons/:group_id', function(req, res, next) {
 	persons.find({'group_id' : req.params.group_id},function(err, data) {
 		console.log(req.params.group_id);
@@ -96,7 +94,8 @@ app.get('/api/persons/:group_id', function(req, res, next) {
 app.post('/api/persons', function(req, res) {
 		persons.create({
 			name: req.body.name,
-			group_id: req.body.groupid
+			group_id: req.body.groupid,
+			valuesum : 0
 		}, function(err, data) {
 			
 			if (err)
@@ -120,8 +119,17 @@ app.delete('/api/persons/:person_id/:group_id', function(req,res){
 		});
 	});
 });
+app.delete('/api/personexpenses/:person_id', function(req,res){
+	expenses.remove({
+		person_id : req.params.person_id
+	},function(err, data) {
+		if (err) res.send(err);
+		});
+	});
+
 
 //Betrag
+
 app.get('/api/expenses/:person_id', function(req, res, next) {
 	expenses.find({'person_id' : req.params.person_id},function(err, data) {
 		if(err) res.json(err);
@@ -146,6 +154,7 @@ app.post('/api/expenses', function(req, res) {
 			});
 		});
 	});
+
 
 app.delete('/api/expenses/:expense_id/:person_id', function(req,res){
 	expenses.remove({

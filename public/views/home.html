@@ -33,14 +33,14 @@
 							</tr>
 							<tr>
 								<td>
-								<input type="text" ng-model="newGroupName">
+								<input type="text" ng-model="newGroupName" ng-keypress="pressEnter($event, 'add')"> <div class="alert alert-danger" ng-show="show">Bitte Gruppenname eingeben</div>
 								</td>
 							</tr>
 						</table>
 						</div>
 				</div>
 				<div class="modal-footer">
-					<a href class="btn btn-success" ng-click="addGroup()" data-dismiss="modal">speichern</a>
+					<a href class="btn btn-success"  ng-click="addGroup()" data-dismiss="modal">speichern</a>
 					<a href class="btn btn-danger" data-dismiss="modal">schließen</a>
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Gruppenname: <input type="text" ng-model="editGroupName">
+						Gruppenname: <input type="text" ng-model="editGroupName" ng-keypress="pressEnter($event, 'edit')"><div class="alert alert-danger" ng-show="show">Bitte Gruppenname eingeben</div>
 					</p>
 				</div>
 				<div class="modal-footer">
